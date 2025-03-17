@@ -17,7 +17,7 @@ response = (
 )
 
 #Show the first card
-st.write(response[1])
+st.write(response)
 
 
 #Supabase https://docs.streamlit.io/develop/tutorials/databases/supabase

@@ -4,7 +4,31 @@ url: str = st.secrets["connections"]["supabase"]["url"]
 key: str = st.secrets["connections"]["supabase"]["key"]
 supabase: Client = create_client(url, key)
 
-#load_dotenv()
+#When you are ready to turn this into react!
+#https://adevait.com/react/building-crud-app-with-react-js-supabase
+
+#Dummy link to test editing a part
+
+page_action=""
+test_card_url="/?page_action=edit_card&card_id=Milwaukee_123"
+blank_url="http://localhost:8501/"
+st.write(f"[Load test card]({test_card_url})")
+st.write(f"[Show blank page]({blank_url})")
+
+
+
+#Grab the query parameters
+#check if query params is empty
+if st.query_params.get("page_action") is None:
+    st.write("No paramaters")
+else:
+    if st.query_params["page_action"]=="edit_card":
+        page_action="edit_card"
+        card_id=st.query_params["card_id"]
+        st.write("Lets edit a card!")
+        st.write(st.query_params["card_id"])
+
+
 
 st.title("KitRef Card Editor")
 st.write("Please share your accessory or organization tip on Kitref.")
@@ -29,33 +53,37 @@ st.write("Please share your accessory or organization tip on Kitref.")
 def make_card_id(mfg, model_number):
     return f"{mfg}_{model_number}"
 
-#response = (
-#    supabase.table("cards")
-#    .select("*")
-#    .execute()
-#)
 
-#Show the first card
-#st.write(response.data[1])
+#For the edit card action, grab the values for the existing card
+if page_action=="edit_card":
 
-page_action="edit_card"
+    existing_card_response = (
+        supabase.table("cards")
+        .select("*")
+        .eq("card_id", card_id)
+        .execute()
+    )
+    #Show the first card
+    st.write(existing_card_response.data[0])
+
+    #Set the default values for the form
+
+
 
 source="test"
 
 #now create some fields to add a new card
-mfg = st.text_input("Card Manufacturer - Enter Reddit if this is a Reddit post")
+mfg = st.text_input("Card Manufacturer - Enter Reddit if you are sharing a Reddit post")
 
-model_number = st.text_input("Model Number - For Reddit posts enter the number after /comments in the URL")
+model_number = st.text_input("Model Number - For Reddit posts enter the number after /comments/ in the URL")
 st.write("Example use 1jc5wbs for https://www.reddit.com/r/Packout/comments/1jc5wb3/")
 
 
-card_title = st.text_input("Card Title")
-card_body = st.text_input("Card Description")
-
-main_url = st.text_input("Card Link")
-card_type = st.selectbox("Card Type", ["Product", "Accessory", "Organization"])
-#Make this a dropdown
-card_family = st.selectbox("Card Family", ["Milwaukee Packout", "M12", "M18"])
+card_title = st.text_input("Title")
+card_body = st.text_input("Description")
+main_url = st.text_input("Link to product page or post")
+card_type = st.selectbox("Type", ["Product", "Accessory", "Organization"])
+card_family = st.selectbox("Family", ["Milwaukee Packout", "M12", "M18"])
 
 button_add_card = st.button("Add Card")
 

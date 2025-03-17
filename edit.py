@@ -1,12 +1,21 @@
-import streamlit as st  
-from st_supabase_connection import st_supabase_connection
-#Using Streamit to for card crud operations
+
+import streamlit as st
+#from st_supabase_connection import SupabaseConnection
 
 st.title("Edit Card")
 
-conn=st.connection("supabase",type=SupabaseConnection)
+# Initialize connection.
 
-rows=conn.table("cards").select("*").execute()
+# Initialize connection
+""""
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
+
+conn = st.connection("supabase",type=SupabaseConnection)
+st.title("Edit Card")
+
+# Query data
+rows = conn.query("cards").select("*").execute()
 for row in rows:
     st.write(row["card_id"], row["card_title"])
     
@@ -22,3 +31,4 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+"""

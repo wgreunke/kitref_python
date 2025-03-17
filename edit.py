@@ -1,34 +1,23 @@
-
 import streamlit as st
-from st_supabase_connection import SupabaseConnection
+from supabase import create_client, Client
+url: str = st.secrets["connections"]["supabase"]["url"]
+key: str = st.secrets["connections"]["supabase"]["key"]
+supabase: Client = create_client(url, key)
+
+#load_dotenv()
 
 st.title("Edit Card")
 
-# Initialize connection.
 
-# Initialize connection
 
-supabase_url = os.getenv("SUPABASE_URL")
-supabase_key = os.getenv("SUPABASE_KEY")
+response = (
+    supabase.table("cards")
+    .select("*")
+    .execute()
+)
 
-conn = st.connection("supabase",type=SupabaseConnection)
-st.title("Edit Card")
-
-# Query data
-rows = conn.query("cards").select("*").execute()
-for row in rows:
-    st.write(row["card_id"], row["card_title"])
-    
+#Show the first card
+st.write(response[1])
 
 
 #Supabase https://docs.streamlit.io/develop/tutorials/databases/supabase
-
-
-#Start by showing a list of existing cards
-
-#pull secrets from .env
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-"""

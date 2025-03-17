@@ -1,13 +1,13 @@
 
 import streamlit as st
-#from st_supabase_connection import SupabaseConnection
+from st_supabase_connection import SupabaseConnection
 
 st.title("Edit Card")
 
 # Initialize connection.
 
 # Initialize connection
-""""
+
 supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
 

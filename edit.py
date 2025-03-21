@@ -15,6 +15,14 @@ blank_url="http://localhost:8501/"
 st.write(f"[Load test card]({test_card_url})")
 st.write(f"[Show blank page]({blank_url})")
 
+#Declare varibles used to hold values for edit.
+old_title=""
+old_card_body =""
+old_main_url = ""
+old_card_type = ""
+old_card_family = ""
+#MFG and model number are fixed for life of card. May have to revist this later.
+
 
 
 #Grab the query parameters
@@ -27,11 +35,13 @@ else:
         card_id=st.query_params["card_id"]
         st.write("Lets edit a card!")
         st.write(st.query_params["card_id"])
+        #Load the values so they can be passed to the card.
+        
 
 
 
 st.title("KitRef Card Editor")
-st.write("Please share your accessory or organization tip on Kitref.")
+st.write("Please share your accessory or organization tips on Kitref.")
 
 #Here are the fields for a card
 #"card_id":"Milwaukee_48-22-8302"
@@ -65,52 +75,77 @@ if page_action=="edit_card":
     )
     #Show the first card
     st.write(existing_card_response.data[0])
-
+    old_card=existing_card_response.data[0]
+    old_title=old_card["card_title"]
+    old_card_body =old_card["card_body"]
+    old_main_url = old_card["main_url"]
+    old_card_type = old_card["card_type"]
+    old_card_family = old_card["card_family"]
     #Set the default values for the form
+
+
 
 
 
 source="test"
 
 #now create some fields to add a new card
-mfg = st.text_input("Card Manufacturer - Enter Reddit if you are sharing a Reddit post")
+with st.form("card_form"):
+    mfg = st.text_input("Card Manufacturer - Enter Reddit if you are sharing a Reddit post")
+    model_number = st.text_input("Model Number - For Reddit posts enter the number after /comments/ in the URL")
+    st.write("Example use 1jc5wbs for https://www.reddit.com/r/Packout/comments/1jc5wb3/")
 
-model_number = st.text_input("Model Number - For Reddit posts enter the number after /comments/ in the URL")
-st.write("Example use 1jc5wbs for https://www.reddit.com/r/Packout/comments/1jc5wb3/")
 
+    card_title = st.text_input("Title",old_title)
+    card_body = st.text_input("Description", old_card_body)
+    main_url = st.text_input("Link to product page or post",old_main_url)
+    card_type = st.selectbox("Type", [old_card_type,"Product", "Accessory", "Organization"])
+    card_family = st.selectbox("Family", [old_card_family,"Milwaukee Packout", "M12", "M18"])
+    card_button=st.form_submit_button("Add Card")
 
-card_title = st.text_input("Title")
-card_body = st.text_input("Description")
-main_url = st.text_input("Link to product page or post")
-card_type = st.selectbox("Type", ["Product", "Accessory", "Organization"])
-card_family = st.selectbox("Family", ["Milwaukee Packout", "M12", "M18"])
-
-button_add_card = st.button("Add Card")
-
-if button_add_card:
-    card_id = make_card_id(mfg, model_number)
-    
+if card_button:
+    if page_action=="new":
+        card_id = make_card_id(mfg, model_number)
     #Send to supabase
-    supabase.table("cards").insert({
-        "card_id": card_id,
-        "card_title": card_title,
-        "card_body": card_body,
-        "main_url": main_url,
-        "model_number": model_number,
-        "mfg": mfg,
-        "card_type": card_type,
-        "card_family": card_family,
-        "source": source
-    }).execute()
+        supabase.table("cards").insert({
+            "card_id": card_id,
+            "card_title": card_title,
+            "card_body": card_body,
+            "main_url": main_url,
+            "model_number": model_number,
+            "mfg": mfg,
+            "card_type": card_type,
+            "card_family": card_family,
+            "source": source
+        }).execute()
 
-    st.success("Card added successfully")
+        st.success("Card added successfully")
     #After the card is added, show the card
-    st.write(card_id)
+        st.write(card_id)
     #Show the card in the table
 #    st.write(supabase.table("cards").select("*").eq("card_id", card_id).execute().data[0])
     #Add a link to the card
-    new_card_url = f"https://www.kitref.com/products/{card_id}"
-    st.write(f"[View Card]({new_card_url})")
+        new_card_url = f"https://www.kitref.com/products/{card_id}"
+        st.write(f"[View Card]({new_card_url})")
+    elif page_action=="edit_card":
+        supabase.table("cards").update({
+            "card_id": card_id,
+            "card_title": card_title,
+            "card_body": card_body,
+            "main_url": main_url,
+            "model_number": model_number,
+            "mfg": mfg,
+            "card_type": card_type,
+            "card_family": card_family,
+            "source": source
+        }).execute()
+
+        st.success("Card added successfully")
+    #After the card is added, show the card
+        st.write(card_id)        
+
+
+
 
 
 #Supabase https://docs.streamlit.io/develop/tutorials/databases/supabase

@@ -62,7 +62,7 @@ with st.form("card_form"):
     if page_action == "new":
         mfg = st.text_input("Card Manufacturer - Enter Reddit if you are sharing a Reddit post", value=old_mfg)
         model_number = st.text_input("Model Number - For Reddit posts enter the number after /comments/ in the URL", value=old_model_number)
-        st.write("Example use 1jc5wbs for https://www.reddit.com/r/Packout/comments/1jc5wb3/")
+        st.markdown("Example use **1jc5wbs** for https://www.reddit.com/r/Packout/comments/1jc5wb3/**")
     else:
         st.markdown("**Manufacturer:** " + old_mfg)
         st.markdown("**Model Number:** " + old_model_number)

@@ -28,7 +28,8 @@ old_card_body = ""
 old_main_url = ""
 old_card_type = ""
 old_card_family = ""
-source="test"
+old_embed_code=""
+source=""
 #MFG and model number are fixed for life of card. May have to revist this later.
 
 # Check query parameters first
@@ -55,6 +56,7 @@ elif st.query_params["page_action"] == "edit_card":
             old_main_url = old_card["main_url"]
             old_card_type = old_card["card_type"]
             old_card_family = old_card["card_family"]
+            old_embed_code=old_card["embed_code"]
 
 # Create form with submit button
 with st.form("card_form"):
@@ -72,6 +74,8 @@ with st.form("card_form"):
     main_url = st.text_input("Link to product page or post", value=old_main_url)
     card_type = st.selectbox("Type", [old_card_type,"Product", "Accessory", "Organization"])
     card_family = st.selectbox("Family", [old_card_family,"Packout", "M12", "M18"])
+    embed_code=st.text_input("Embedded code",value=old_embed_code)
+    source=st.selectBox("What is the source of the link?",["OEM","YouTube","Reddit","Etsy","Amazon","Other"]
     
     # Submit button must be inside the form block
     button_text = "Update Card" if page_action == "edit_card" else "Add Card"
@@ -91,6 +95,7 @@ if card_button:
             "mfg": mfg,
             "card_type": card_type,
             "card_family": card_family,
+            "embed_code":embed_code,
             "source": source
         }).execute()
 

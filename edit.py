@@ -75,7 +75,7 @@ with st.form("card_form"):
     card_type = st.selectbox("Type", [old_card_type,"Product", "Accessory", "Organization"])
     card_family = st.selectbox("Family", [old_card_family,"Packout", "M12", "M18"])
     embed_code=st.text_input("Embedded code",value=old_embed_code)
-    source=st.selectBox("What is the source of the link?",["OEM","YouTube","Reddit","Etsy","Amazon","Other"])
+    source=st.selectbox("What is the source of the link?",["OEM","YouTube","Reddit","Etsy","Amazon","Other"])
     
     # Submit button must be inside the form block
     button_text = "Update Card" if page_action == "edit_card" else "Add Card"

@@ -12,7 +12,15 @@ blank_url="http://localhost:8501/"
 page_action = ""
 parent_card_id = ""
 
-if st.query_params.get("page_action") is None:
+#For testing purposes, the bare url will not have a card_id.
+if st.query_params.get("card_id") is None:
+    #Show a link to the test card.
+    test_card_url = "/?parent_card_id=Milwaukee_123"
+    st.markdown(f"[Test card]({test_card_url})")
+
+
+
+if st.query_params.get("page_action") =="show_card_list" :
     page_action = "show_card_list" #This is the first time you come to page.
 
     #Show the list of cards

@@ -25,7 +25,7 @@ elif st.query_params.get("page_action") == "show_card_list":
 
     #Show the list of cards
     #Grab the parent card from the url.
-    parent_card_id = st.query_params["card_id"]
+    parent_card_id = st.query_params["parent_card_id"]
     st.write(f"Parent card: {parent_card_id}")
 
     cards_list = (

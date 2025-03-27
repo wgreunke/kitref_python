@@ -6,8 +6,7 @@ supabase: Client = create_client(url, key)
 
 
 st.title("Associate")
-test_card_url="/?page_action=edit_card&card_id=Milwaukee_123"
-blank_url="http://localhost:8501/"
+
 
 page_action = ""
 parent_card_id = ""
@@ -36,6 +35,7 @@ elif st.query_params.get("page_action") == "show_card_list":
         )
 
     #Print the list of cards.
+    st.write(cards_list)
     for row in cards_list.data:
         card_id = row['card_id']
         link = f"?page_action=add_child_card&card_id={card_id}"

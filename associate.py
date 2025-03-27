@@ -7,7 +7,7 @@ supabase: Client = create_client(url, key)
 
 st.title("Associate")
 
-
+st.markdown(f"[blank page](/)")
 page_action = ""
 parent_card_id = ""
 
@@ -27,10 +27,11 @@ elif st.query_params.get("page_action") == "show_card_list":
     parent_card_id = st.query_params["parent_card_id"]
     st.write(f"Parent card: {parent_card_id}")
 
+    #List all the cards for now, need to see how to 
     cards_list = (
             supabase.table("cards")
             .select("*")
-            .eq("card_id", parent_card_id)
+
             .execute()
         )
 
@@ -38,7 +39,7 @@ elif st.query_params.get("page_action") == "show_card_list":
     st.write(cards_list)
     for row in cards_list.data:
         card_id = row['card_id']
-        link = f"?page_action=add_child_card&card_id={card_id}"
+        link = f"/?page_action=add_child_card&card_id={card_id}"
         st.markdown(f"[{card_id}]({link})")
 
 

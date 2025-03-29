@@ -39,8 +39,9 @@ elif st.query_params.get("page_action") == "show_card_list":
     st.write(cards_list)
     for row in cards_list.data:
         card_id = row['card_id']
+        card_title = row['card_title']
         link = f"/?page_action=add_child_card&card_id={card_id}"
-        st.markdown(f"{card_id} [Add as child]({link})")
+        st.markdown(f"[{card_id} - {card_title}]({link})")
 
 
 

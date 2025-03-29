@@ -31,7 +31,7 @@ elif st.query_params.get("page_action") == "show_card_list":
     cards_list = (
             supabase.table("cards")
             .select("*")
-
+            .neq("mfg", "Milwaukee")
             .execute()
         )
 
@@ -41,7 +41,7 @@ elif st.query_params.get("page_action") == "show_card_list":
         card_id = row['card_id']
         card_title = row['card_title']
         link = f"/?page_action=add_child_card&card_id={card_id}"
-        st.markdown(f"[{card_id} - {card_title}]({link})")
+        st.markdown(f"{card_id} - {card_title}[ Add as child]({link})")
 
 
 
